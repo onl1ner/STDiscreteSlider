@@ -37,6 +37,14 @@ public struct STDiscreteSlider<Option>: View {
     
     private var step: CGFloat = 0.0
     
+    private var sliderHeight: CGFloat {
+        if let tick = self.tick {
+            return max(self.handle.height, self.track.height, tick.height)
+        }
+        
+        return max(self.handle.height, self.track.height)
+    }
+    
     /**
      Creates discrete slider with given track, tick and handle.
      
@@ -148,6 +156,7 @@ public struct STDiscreteSlider<Option>: View {
                 
             }
         }
+        .frame(height: self.sliderHeight)
     }
     
     private func create(tick: AnySliderTick, with width: CGFloat) -> some View {
@@ -189,26 +198,4 @@ public struct STDiscreteSlider<Option>: View {
         
         withAnimation { self.handleOffset = lineWidth * page * self.step }
     }
-}
-
-struct Wrapper: View {
-    
-    @State private var selectedItem: Int = 0
-    
-    var body: some View {
-        STDiscreteSlider(
-            options: [1, 2, 3, 4],
-            selectedItem: $selectedItem
-        )
-        .padding()
-    }
-    
-}
-
-struct TestPreviews: PreviewProvider {
-    
-    static var previews: some View {
-        Wrapper()
-    }
-    
 }
